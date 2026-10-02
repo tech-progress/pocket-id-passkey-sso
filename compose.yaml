@@ -1,0 +1,24 @@
+services:
+  pocket-id:
+    build: .
+    image: ${LOCAL_IMAGE:-pocket-id-passkey-sso:local}
+    command: [sh, /opt/pocket-gate/entrypoint.sh, python3, /opt/pocket-gate/gateway.py]
+    environment:
+      APP_URL: ${APP_URL:?Set a stable canonical HTTPS origin}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?Generate and save a stable encryption key}
+      GATE_ADMIN_TOKEN: ${GATE_ADMIN_TOKEN:?Generate a separate operator gate token}
+      GATE_FORCE_LOCK: ${GATE_FORCE_LOCK:-true}
+      PORT: "8080"
+    ports:
+      - "127.0.0.1:${LOCAL_PORT:-18400}:8080"
+    volumes:
+      - pocket-data:/app/data
+    stop_grace_period: 30s
+    healthcheck:
+      test: [CMD, python3, /opt/pocket-gate/gateway.py, healthcheck]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+volumes:
+  pocket-data:

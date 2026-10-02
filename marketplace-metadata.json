@@ -1,0 +1,11 @@
+{
+  "directory": "pocket-id-passkey-sso",
+  "name": "Pocket ID passkey SSO",
+  "category": "Authentication",
+  "description": "Passkey OIDC identity with guarded setup and persistent SQLite.",
+  "icon": "https://raw.githubusercontent.com/pocket-id/pocket-id/v2.17.0/frontend/static/img/static-logo.svg",
+  "origins": [
+    {"name": "Pocket ID", "url": "https://pocket-id.org"},
+    {"name": "Pocket ID source", "url": "https://github.com/pocket-id/pocket-id"}
+  ]
+}

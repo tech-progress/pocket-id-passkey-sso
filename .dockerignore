@@ -1,0 +1,11 @@
+*
+!LICENSE
+!gateway.py
+!apk.lock
+!scripts/
+!scripts/entrypoint.sh
+!scripts/audit-apk-lock.py
+!tests/
+!tests/**
+!licenses/
+!licenses/**

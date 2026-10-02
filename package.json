@@ -1,0 +1,12 @@
+{
+  "name": "railway-pocket-id-passkey-sso-template",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node scripts/render.mjs",
+    "verify": "./scripts/verify.sh",
+    "smoke": "./scripts/smoke.sh",
+    "test:local": "./scripts/test-local.sh"
+  },
+  "devDependencies": { "railway": "3.6.0" }
+}

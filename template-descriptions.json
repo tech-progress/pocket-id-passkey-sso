@@ -1,0 +1,9 @@
+{
+  "Pocket ID": {
+    "PORT": "Public gate HTTP port; Railway terminates HTTPS. Backend remains on 127.0.0.1:1411.",
+    "APP_URL": "Stable canonical HTTPS issuer/passkey origin; choose the final domain before enrolling.",
+    "ENCRYPTION_KEY": "Generated stable encryption key. Back up separately with the volume; never regenerate on restart.",
+    "GATE_ADMIN_TOKEN": "Generated independent operator gate token. Secret; not a Pocket ID API key or login credential.",
+    "GATE_FORCE_LOCK": "true keeps ALL application routes operator-only. Set false only after two owner passkeys and signed activation; missing activation still locks."
+  }
+}
