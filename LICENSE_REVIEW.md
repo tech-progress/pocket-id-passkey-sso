@@ -1,4 +1,8 @@
-# License review — October 2, 2026
+# License review — October 6, 2026
+
+## Current finite source-only disposition
+
+Independent selected-artifact/source review identifies no concrete missing grant or required notice for distributing this authored recipe/configuration/external lock references. It does not approve distribution of an assembled OCI image, dependency bundle or vendor artwork. Exact upstream BSD notice and scoped authored MIT grant are retained. The selected image/source/lock and seventeen APK pins were reviewed; Python PSF and supporting GPL-3.0-or-later gdbm/readline obligations remain separate for future binary distribution. See [ARTIFACT_REVIEW.md](ARTIFACT_REVIEW.md) for provenance and corresponding-source limits, and [SECURITY_REVIEW.md](SECURITY_REVIEW.md) for finite default-exposure observations. Historical component observations below remain evidence, not blanket clearance. Final source/runtime/live/publication qualification is separately required.
 
 
 ## Owner-approved recipe license

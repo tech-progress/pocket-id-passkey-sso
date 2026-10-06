@@ -18,6 +18,7 @@ mkdir -p evidence
 work="$(mktemp -d "$root/evidence/browser.XXXXXXXX")"
 export POCKET_BROWSER_WORK="$work" POCKET_BROWSER_PROJECT="$project"
 compose=(docker compose -p "$project" -f "$root/compose.yaml")
+restore_compose=(docker compose -p "$project-restore" -f "$root/compose.yaml")
 cleanup() {
     status=$?
     trap - EXIT
@@ -27,9 +28,11 @@ cleanup() {
         done
     fi
     timeout 90 "${compose[@]}" down --volumes --remove-orphans --timeout 15 >/dev/null 2>&1 || status=1
+    timeout 90 "${restore_compose[@]}" down --volumes --remove-orphans --timeout 15 >/dev/null 2>&1 || status=1
     if docker image inspect "$LOCAL_IMAGE" >/dev/null 2>&1; then timeout 30 docker image rm "$LOCAL_IMAGE" >/dev/null 2>&1 || status=1; fi
     rm -rf "$work"
     if [[ -n "$(docker ps -aq --filter "label=com.docker.compose.project=$project")$(docker volume ls -q --filter "label=com.docker.compose.project=$project")$(docker network ls -q --filter "label=com.docker.compose.project=$project")" ]]; then status=1; fi
+    if [[ -n "$(docker ps -aq --filter "label=com.docker.compose.project=$project-restore")$(docker volume ls -q --filter "label=com.docker.compose.project=$project-restore")$(docker network ls -q --filter "label=com.docker.compose.project=$project-restore")" ]]; then status=1; fi
     echo "Owned browser project $project cleanup exit $status"
     exit "$status"
 }

@@ -82,6 +82,21 @@ class GateTests(unittest.TestCase):
         self.gate.lock()
         self.assertFalse(self.gate.state.exists())
 
+    def test_lock_syncs_directory_after_removing_activation(self):
+        self.fixture()
+        self.gate.activate()
+        with patch("gateway.os.fsync", side_effect=lambda descriptor: self.assertFalse(self.gate.state.exists())) as synced:
+            self.gate.lock()
+        synced.assert_called_once()
+        self.assertFalse(self.gate.active())
+
+    def test_lock_reports_directory_sync_failure(self):
+        self.fixture()
+        self.gate.activate()
+        with patch("gateway.os.fsync", side_effect=OSError("sync failed")), self.assertRaises(OSError):
+            self.gate.lock()
+        self.assertFalse(self.gate.active())
+
     def test_cookie_expiry_forgery_origin_and_rotation(self):
         with patch("gateway.time.time", return_value=1000):
             cookie = f"{COOKIE}={self.gate.session()}"

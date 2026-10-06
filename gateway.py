@@ -130,6 +130,11 @@ class Gate:
     def lock(self):
         with self.state_lock:
             self.state.unlink(missing_ok=True)
+            directory = os.open(self.data, os.O_RDONLY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
 
 
 def normalized_path(raw):

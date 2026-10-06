@@ -2,7 +2,8 @@
 set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
-required=(Dockerfile apk.lock gateway.py compose.yaml .dockerignore .gitignore .env.example .railway/railway.ts package.json bun.lock VERSION CHANGELOG.md README.md MARKETPLACE.md PUBLISHING.md SUPPORT.md UPGRADE.md LICENSE_REVIEW.md FINDINGS.md marketplace-metadata.json template-defaults.json template-descriptions.json template-networking.json template-volumes.json scripts/smoke.sh scripts/test-local.sh scripts/restore-template-draft.sh scripts/audit-template.sh scripts/audit-apk-lock.py)
+required=(Dockerfile apk.lock gateway.py compose.yaml .dockerignore .gitignore .env.example .railway/railway.ts package.json bun.lock VERSION CHANGELOG.md README.md MARKETPLACE.md PUBLISHING.md SUPPORT.md UPGRADE.md LICENSE_REVIEW.md marketplace-metadata.json template-defaults.json template-descriptions.json template-networking.json template-volumes.json scripts/smoke.sh scripts/test-local.sh scripts/restore-template-draft.sh scripts/audit-template.sh scripts/audit-apk-lock.py)
+if [[ "${PUBLIC_DISTRIBUTION:-0}" != 1 ]]; then required+=(FINDINGS.md); fi
 for file in "${required[@]}"; do [[ -s "$file" ]] || { echo "Missing $file" >&2; exit 1; }; done
 version="$(cat VERSION)"
 [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
@@ -11,6 +12,8 @@ for file in *.json; do jq empty "$file"; done
 for file in scripts/*.sh; do bash -n "$file"; done
 sh -n scripts/entrypoint.sh
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 -m unittest discover -s tests -v
+if [[ -f tests/docs.test.mjs ]]; then node --test tests/docs.test.mjs; fi
+node --test tests/oidc-client.test.mjs
 jq -e '.description|length>=45 and length<=75' marketplace-metadata.json >/dev/null
 jq -e 'has("id")|not' marketplace-metadata.json >/dev/null
 jq -e 'has("code")|not' marketplace-metadata.json >/dev/null
